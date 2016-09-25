@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-      install_requires=['distribute', 'Adafruit_MotorHAT>=1.3.0','nxt-python==2.2.2'],
+      install_requires=['distribute', 'Adafruit_MotorHAT>=1.3.0','nxt-python==2.2.2', 'PyTweening==1.0.3'],
       name = '${PROJECT_NAME}',
       description = 'Hardware abstraction layer for Raspbuggy',
       author = 'Brice Copy',

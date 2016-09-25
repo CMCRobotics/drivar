@@ -7,3 +7,5 @@ apt-get update
 apt-get install -y docker-hypriot
 
 #  (!) the container needs to be run as PRIVILEGED to mount shared memory
+mvn -Dmaven.javadoc.failOnError=false install
+git clone https://github.com/nitinverma/maven-python-mojos.git
