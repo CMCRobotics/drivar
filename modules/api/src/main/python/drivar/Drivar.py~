@@ -18,9 +18,6 @@ class Drivar(object):
     DIR_LEFT = 0x04
     DIR_RIGHT = 0x08
     
-    DIR_PORTSIDE = 0x04
-    DIR_STARBOARD = 0x08
-
     WHEELS_RIGHT = 0x01
     WHEELS_LEFT = 0x02
     WHEELS_BOTH = 0x04
