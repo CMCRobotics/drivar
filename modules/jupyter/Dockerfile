@@ -14,4 +14,6 @@ RUN pip2 install https://github.com/sightmachine/SimpleCV/zipball/master
 RUN python2 -m pip install ipykernel
 RUN python2 -m ipykernel install
 
-CMD ["jupyter", "notebook", "'--KernelSpecManager.whitelist=[\"python2\"]'"]
+RUN sed -i "/c.KernelSpecManager.whitelist/c c.KernelSpecManager.whitelist=[\"python2\"]" /root/.jupyter/jupyter_notebook_config.py
+
+CMD ["jupyter", "notebook"]
