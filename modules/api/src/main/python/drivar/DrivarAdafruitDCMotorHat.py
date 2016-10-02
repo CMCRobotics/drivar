@@ -55,7 +55,7 @@ class DrivarAdafruitDCMotorHat(Drivar):
       Internal method to control wheel rotation - the speed updates must be gradual to
       obtain the best movement precision possible.
     """
-    def _updateWheelsRotation(self, leftSetDirection = Drivar.DIR_FORWARD, rightSetDirection = Drivar.DIR_FORWARD, newDcMotorHatSpeed, callback = None):
+    def _updateWheelsRotation(self, leftSetDirection = Drivar.DIR_FORWARD, rightSetDirection = Drivar.DIR_FORWARD, newDcMotorHatSpeed = 150, callback = None):
         # Work out the steps required to affect speed differences between the current speed and the future one
         leftReverseDirection = False
         if(self.m_leftCurrentDirection != leftSetDirection):
@@ -91,7 +91,7 @@ class DrivarAdafruitDCMotorHat(Drivar):
         if callback is not None:
             callback()
 
-  def rotateWheels(self, wheelSet = Drivar.WHEELS_BOTH, direction = Drivar.DIR_FORWARD, speedLevel = Drivar.SPEED_FAST, callback = None):
+    def rotateWheels(self, wheelSet = Drivar.WHEELS_BOTH, direction = Drivar.DIR_FORWARD, speedLevel = Drivar.SPEED_FAST, callback = None):
         speed = self._getDCMotorHatSpeed(speedLevel)
         motorHatDirection = Adafruit_MotorHAT.FORWARD
         if(direction == Drivar.DIR_BACKWARD):
@@ -136,12 +136,12 @@ class DrivarAdafruitDCMotorHat(Drivar):
                 for m in self.m_allMotors:
                     m.setSpeed(i)
                 time.sleep(0.01)
-         for m in self.m_allMotors:
-             m.run(Adafruit_MotorHAT.RELEASE)
-         self.m_moving = False
-         self.m_currentSpeed = 0
-            if callback is not None:
-                callback()
+        for m in self.m_allMotors:
+            m.run(Adafruit_MotorHAT.RELEASE)
+        self.m_moving = False
+        self.m_currentSpeed = 0
+        if callback is not None:
+            callback()
  
     '''
       Return the distance to the nearest obstacle, in centimeters
