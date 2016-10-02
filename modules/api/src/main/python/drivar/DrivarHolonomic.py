@@ -15,7 +15,7 @@ class DrivarHolonomic(Drivar):
     
     def __init__(self):
         self.m_initialized = False
-        self.mh = Adafruit_MotorHAT(addr=0x60)
+        self.m_hat = Adafruit_MotorHAT(addr=0x60)
 
         self.m_motorOne =    None
         self.m_motorTwo =    None
@@ -26,10 +26,10 @@ class DrivarHolonomic(Drivar):
 
     def initialize(self):
         super(DrivarHolonomic,self).initialize()
-        self.m_motorOne =   mh.getMotor(1)
-        self.m_motorTwo =   mh.getMotor(2)
-        self.m_motorThree = mh.getMotor(3)
-        self.m_motorFour =  mh.getMotor(4)
+        self.m_motorOne =   self.m_hat.getMotor(1)
+        self.m_motorTwo =   self.m_hat.getMotor(2)
+        self.m_motorThree = self.m_hat.getMotor(3)
+        self.m_motorFour =  self.m_hat.getMotor(4)
         self.m_motorsOdd = [self.m_motorOne, self.m_motorThree]
         self.m_motorsEven = [self.m_motorTwo, self.m_motorFour]
         self.m_allMotors = [self.m_motorOne, self.m_motorTwo, self.m_motorThree,  self.m_motorFour]
@@ -92,7 +92,7 @@ class DrivarHolonomic(Drivar):
         
         motorsToActuate = self.m_allMotors
         self._actuateMotors(motorsToActuate, self._getDCMotorHatSpeed(Drivar.SPEED_SLOW))
-        time.sleep( (angle/90) * 1000)
+        time.sleep( (angle/90) )
         self.stop()
 
     """ 
@@ -116,7 +116,7 @@ class DrivarHolonomic(Drivar):
     """
     def stop(self, callback = None):
         if self.m_moving :
-            for x in range(power, 0, -20):
+            for x in range(self.m_currentSpeed, 0, -20):
                 for m in self.m_allMotors:
                     m.setSpeed(x)
                     time.sleep(0.01)
@@ -156,13 +156,13 @@ class DrivarHolonomic(Drivar):
     @staticmethod
     def _getDCMotorHatSpeed(speed):
         if(speed==Drivar.SPEED_SLOW):
-            return 150
+            return 80
         elif(speed==Drivar.SPEED_MEDIUM):
             return 200
         elif(speed==Drivar.SPEED_FAST):
             return 255
         else :
-            return 150 
+            return 80
 
 Drivar.register(DrivarHolonomic)
 
