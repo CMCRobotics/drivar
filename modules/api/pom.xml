@@ -16,19 +16,19 @@
 
   <build>
     <plugins>
-              <plugin>
-                    <groupId>maven-python-mojos</groupId>
-                    <artifactId>maven-python-distribute-plugin</artifactId>
-                    <version>0.1.4</version>
-                    <executions>
-                            <execution>
-                                    <goals>
-                                            <goal>package</goal>
-                                            <goal>install</goal>
-                                    </goals>
-                            </execution>
-                    </executions>
-            </plugin>
+		<plugin>
+			<groupId>maven-python-mojos</groupId>
+			<artifactId>maven-python-distribute-plugin</artifactId>
+			<version>0.1.4</version>
+			<executions>
+				<execution>
+					<goals>
+						<goal>package</goal>
+						<goal>install</goal>
+					</goals>
+				</execution>
+			</executions>
+		</plugin>
     </plugins>
   </build>
 
