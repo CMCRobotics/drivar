@@ -164,7 +164,7 @@ class DrivarHolonomic(Drivar):
         else :
             return 150 
 
-Drivar.register(DrivarAdafruitDCMotorHat)
+Drivar.register(DrivarHolonomic)
 
 if __name__ == '__main__':
-    _drivar = DrivarAdafruitDCMotorHat()
+    _drivar = DrivarHolonomic()
