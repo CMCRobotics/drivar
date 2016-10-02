@@ -91,7 +91,7 @@ class DrivarHolonomic(Drivar):
                 m.run(Adafruit_MotorHAT.FORWARD)
         
         motorsToActuate = self.m_allMotors
-        self._actuateMotors(motorsToActuate, self._getDCMotorHatSpeed(Drivar.SPEED_SLOW))
+        self._actuateMotors(motorsToActuate, self._getDCMotorHatSpeed(Drivar.SPEED_MEDIUM))
         time.sleep( (angle/90) )
         self.stop()
 
