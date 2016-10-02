@@ -136,12 +136,12 @@ class DrivarAdafruitDCMotorHat(Drivar):
                 for m in self.m_allMotors:
                     m.setSpeed(i)
                 time.sleep(0.01)
-	 for m in self.m_allMotors:
-	     m.run(Adafruit_MotorHAT.RELEASE)
-	 self.m_moving = False
-	 self.m_currentSpeed = 0
-        if callback is not None:
-            callback()
+         for m in self.m_allMotors:
+             m.run(Adafruit_MotorHAT.RELEASE)
+         self.m_moving = False
+         self.m_currentSpeed = 0
+            if callback is not None:
+                callback()
  
     '''
       Return the distance to the nearest obstacle, in centimeters
