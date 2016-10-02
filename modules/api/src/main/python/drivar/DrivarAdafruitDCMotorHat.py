@@ -29,7 +29,7 @@ class DrivarAdafruitDCMotorHat(Drivar):
         self.m_rightCurrentDirection = None
 
 
-  def initialize(self):
+    def initialize(self):
         super(DrivarAdafruitDCMotorHat,self).initialize()
         self.m_frontLeftMotor = mh.getMotor(1)
         self.m_frontRightMotor = mh.getMotor(2)
@@ -172,13 +172,13 @@ class DrivarAdafruitDCMotorHat(Drivar):
     @staticmethod
     def _getDCMotorHatSpeed(speed):
         if(speed==Drivar.SPEED_SLOW):
-            return 100
+            return 150
         elif(speed==Drivar.SPEED_MEDIUM):
-            return 180
+            return 200
         elif(speed==Drivar.SPEED_FAST):
             return 255
         else :
-            return 180
+            return 150 
 
 Drivar.register(DrivarAdafruitDCMotorHat)
 

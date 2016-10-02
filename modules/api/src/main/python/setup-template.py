@@ -5,6 +5,7 @@ setup(
       name = '${PROJECT_NAME}',
       description = 'Hardware abstraction layer for Raspbuggy',
       author = 'Brice Copy',
+      author_email = 'brice.copy@gmail.com',
       url = 'https://github.com/cmcrobotics/raspbuggy',
       keywords = ['raspbuggy'],
       version = '${VERSION}',

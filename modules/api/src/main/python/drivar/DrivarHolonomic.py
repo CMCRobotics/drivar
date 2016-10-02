@@ -122,7 +122,7 @@ class DrivarHolonomic(Drivar):
 					time.sleep(0.01)
         for m in self.m_allMotors:
         	m.run(Adafruit_MotorHAT.RELEASE)
-	    time.sleep(0.1)
+        time.sleep(0.1)
 	    self.m_moving = False
         if callback is not None:
                 callback()
