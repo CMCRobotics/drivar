@@ -7,7 +7,6 @@ RUN cd Adafruit-Motor-HAT-Python-Library && python setup.py install
 # Simplecv dependencies (python 3)
 RUN apt-get install ipython python-opencv python-scipy python-numpy python-pygame
 RUN pip2 install svgwrite
-RUN pip2 install drivar
 RUN pip2 install https://github.com/sightmachine/SimpleCV/zipball/master
 
 # Install python 2.7 kernel
@@ -15,5 +14,7 @@ RUN python2 -m pip install ipykernel
 RUN python2 -m ipykernel install
 
 RUN sed -i "/c.KernelSpecManager.whitelist/c c.KernelSpecManager.whitelist=[\"python2\"]" /root/.jupyter/jupyter_notebook_config.py
+RUN pip2 install drivar
+RUN pip2 install gpiozero
 
 CMD ["jupyter", "notebook"]
