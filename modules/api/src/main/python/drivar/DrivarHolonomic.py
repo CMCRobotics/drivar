@@ -8,8 +8,18 @@ Created on Apr 24, 2016
 from drivar.Drivar import Drivar
 from Adafruit_MotorHAT import Adafruit_MotorHAT, Adafruit_DCMotor
 
+import RPi.GPIO as GPIO
 import atexit
 import time
+
+GPIO.setmode(GPIO.BCM)
+
+TRIG = 17
+ECHO = 18
+
+GPIO.setup(TRIG,GPIO.OUT)
+GPIO.setup(ECHO,GPIO.IN)
+GPIO.output(TRIG, False)
 
 class DrivarHolonomic(Drivar):
     
@@ -84,15 +94,15 @@ class DrivarHolonomic(Drivar):
     """
     def turn(self, direction = Drivar.DIR_PORTSIDE, angle = 90, callback = None):
         if (direction == Drivar.DIR_PORTSIDE or direction == Drivar.DIR_LEFT):
-            for m in self.m_allMotors:
+            for m in self.m_motorsOdd:
                 m.run(Adafruit_MotorHAT.BACKWARD)
         elif (direction == Drivar.DIR_STARBOARD or direction == Drivar.DIR_RIGHT):
-            for m in self.m_allMotors:
+            for m in self.m_motorsOdd:
                 m.run(Adafruit_MotorHAT.FORWARD)
         
         motorsToActuate = self.m_allMotors
         self._actuateMotors(motorsToActuate, self._getDCMotorHatSpeed(Drivar.SPEED_MEDIUM))
-        time.sleep( (angle/90) )
+        time.sleep( (angle/90) * 0.01 )
         self.stop()
 
     """ 
@@ -100,6 +110,7 @@ class DrivarHolonomic(Drivar):
        to a target power level
     """
     def _actuateMotors(self, motorsToActuate, power):
+        self.m_moving = True
         for x in range(power, 20):
             for motor in motorsToActuate:
                 motor.setSpeed(x)
@@ -107,7 +118,6 @@ class DrivarHolonomic(Drivar):
         for motor in motorsToActuate:
                 motor.setSpeed(power)        
         self.m_currentSpeed = power
-        self.m_moving = True
     
     
     """
@@ -131,15 +141,26 @@ class DrivarHolonomic(Drivar):
       Return the distance to the nearest obstacle, in centimeters
     '''
     def getDistanceToObstacle(self):
-        # TODO : Add ultrasonic sensor support
-        return 200
+        GPIO.output(TRIG, False)
+        time.sleep(1)
+    	GPIO.output(TRIG, True)
+    	time.sleep(0.00001)
+    	GPIO.output(TRIG, False)
+        while GPIO.input(ECHO)==0:
+            pulse_start = time.time()
+        while GPIO.input(ECHO)==1:
+            pulse_end = time.time()
+        pulse_duration = pulse_end - pulse_start
+        distance = pulse_duration * 17150
+        distance = round(distance, 2)
+
+        return distance
  
     '''
       Indicate with a boolean whether there is an obstacle within the given distance
     '''
     def isObstacleWithin(self, distance):
-        # TODO : Add ultrasonic sensor support
-        return False
+        return (self.getDistanceToObstacle() <= distance)
     
     def rotatePen(self, angle):
         pass
@@ -156,13 +177,13 @@ class DrivarHolonomic(Drivar):
     @staticmethod
     def _getDCMotorHatSpeed(speed):
         if(speed==Drivar.SPEED_SLOW):
-            return 80
+            return 75
         elif(speed==Drivar.SPEED_MEDIUM):
             return 200
         elif(speed==Drivar.SPEED_FAST):
             return 255
         else :
-            return 80
+            return 75
 
 Drivar.register(DrivarHolonomic)
 
