@@ -14,8 +14,8 @@ RUN python2 -m pip install ipykernel
 RUN python2 -m ipykernel install
 
 RUN sed -i "/c.KernelSpecManager.whitelist/c c.KernelSpecManager.whitelist=[\"python2\"]" /root/.jupyter/jupyter_notebook_config.py
-RUN pip2 install drivar
 RUN pip2 install gpiozero
 RUN pip2 install RPi.GPIO
+RUN pip2 install drivar
 
 CMD ["jupyter", "notebook"]

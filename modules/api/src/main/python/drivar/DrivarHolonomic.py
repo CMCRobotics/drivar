@@ -45,7 +45,7 @@ class DrivarHolonomic(Drivar):
         self.m_allMotors = [self.m_motorOne, self.m_motorTwo, self.m_motorThree,  self.m_motorFour]
         
         self.m_initialized = True
-        atexit.register(self.stop)
+        atexit.register(self._shutdown)
         
 
     def move(self, direction=Drivar.DIR_FORWARD,durationInMs=1000, callback = None):
@@ -170,6 +170,11 @@ class DrivarHolonomic(Drivar):
         
     def wait(self, milliseconds):
         time.sleep(milliseconds/1000)
+
+    def _shutdown(self):
+        self.stop()
+        GPIO.cleanup()
+
 
     '''
       Return the Adafruit Motor HAT speed equivalent for the given DRIVAR speed flag
