@@ -119,7 +119,6 @@ class DrivarHolonomic(Drivar):
                 motor.setSpeed(power)        
         self.m_currentSpeed = power
     
-    
     """
       Brings all the motors to a stop (ramp down the speed quickly if
       the motors are currently running)
@@ -155,7 +154,7 @@ class DrivarHolonomic(Drivar):
         distance = round(distance, 2)
 
         return distance
- 
+
     '''
       Indicate with a boolean whether there is an obstacle within the given distance
     '''
