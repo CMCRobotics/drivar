@@ -8,6 +8,7 @@ Created on Apr 24, 2016
 from drivar.Drivar import Drivar
 from Adafruit_MotorHAT import Adafruit_MotorHAT, Adafruit_DCMotor
 
+import RPi.GPIO as GPIO
 import pytweening
 
 import atexit
@@ -31,10 +32,10 @@ class DrivarAdafruitDCMotorHat(Drivar):
 
     def initialize(self):
         super(DrivarAdafruitDCMotorHat,self).initialize()
-        self.m_frontLeftMotor = mh.getMotor(1)
-        self.m_frontRightMotor = mh.getMotor(2)
-        self.m_backRightMotor = mh.getMotor(3)
-        self.m_backLeftMotor = mh.getMotor(4)
+        self.m_frontLeftMotor =  self.mh.getMotor(1)
+        self.m_frontRightMotor = self.mh.getMotor(2)
+        self.m_backRightMotor =  self.mh.getMotor(3)
+        self.m_backLeftMotor =   self.mh.getMotor(4)
         self.m_leftMotors = [self.m_frontLeftMotor, self.m_backLeftMotor]
         self.m_rightMotors = [self.m_frontRightMotor, self.m_backRightMotor]
         self.m_allMotors = [self.m_frontLeftMotor, self.m_frontRightMotor, self.m_backRightMotor,  self.m_backLeftMotor]
@@ -42,6 +43,8 @@ class DrivarAdafruitDCMotorHat(Drivar):
         atexit.register(self.stop)
 
     def move(self, direction=Drivar.DIR_FORWARD,durationInMs=1000, callback = None):
+        if (self.m_moving) :
+            self.stop()
         durationInMs = max(durationInMs,100)
         _direct = direction
         self.rotateWheels(direction = _direct)
