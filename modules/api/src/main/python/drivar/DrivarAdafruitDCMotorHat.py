@@ -9,21 +9,28 @@ from drivar.Drivar import Drivar
 from Adafruit_MotorHAT import Adafruit_MotorHAT, Adafruit_DCMotor
 
 import RPi.GPIO as GPIO
-import pytweening
-
 import atexit
 import time
+
+GPIO.setmode(GPIO.BCM)
+
+TRIG = 17
+ECHO = 18
+
+GPIO.setup(TRIG,GPIO.OUT)
+GPIO.setup(ECHO,GPIO.IN)
+GPIO.output(TRIG, False)
 
 class DrivarAdafruitDCMotorHat(Drivar):
     
     def __init__(self):
         self.m_initialized = False
-        self.mh = Adafruit_MotorHAT(addr=0x60)
+        self.m_hat = Adafruit_MotorHAT(addr=0x60)
 
-        self.m_frontLeftMotor = None
-        self.m_frontRightMotor = None
-        self.m_backLeftMotor = None
-        self.m_backRightMotor = None
+        self.m_motorOne =    None
+        self.m_motorTwo =    None
+        self.m_motorThree =  None
+        self.m_motorFour =   None
         self.m_moving = False
         self.m_currentSpeed = 0
         self.m_leftCurrentDirection = None
@@ -32,15 +39,17 @@ class DrivarAdafruitDCMotorHat(Drivar):
 
     def initialize(self):
         super(DrivarAdafruitDCMotorHat,self).initialize()
-        self.m_frontLeftMotor =  self.mh.getMotor(1)
-        self.m_frontRightMotor = self.mh.getMotor(2)
-        self.m_backRightMotor =  self.mh.getMotor(3)
-        self.m_backLeftMotor =   self.mh.getMotor(4)
-        self.m_leftMotors = [self.m_frontLeftMotor, self.m_backLeftMotor]
-        self.m_rightMotors = [self.m_frontRightMotor, self.m_backRightMotor]
-        self.m_allMotors = [self.m_frontLeftMotor, self.m_frontRightMotor, self.m_backRightMotor,  self.m_backLeftMotor]
+        self.m_motorOne =   self.m_hat.getMotor(1)
+        self.m_motorTwo =   self.m_hat.getMotor(2)
+        self.m_motorThree = self.m_hat.getMotor(3)
+        self.m_motorFour =  self.m_hat.getMotor(4)
+        self.m_leftMotors = [self.m_motorOne, self.m_motorFour]
+        self.m_rightMotors = [self.m_motorTwo, self.m_motorThree]
+        self.m_allMotors = [self.m_motorOne, self.m_motorTwo, self.m_motorThree,  self.m_motorFour]
+        
         self.m_initialized = True
-        atexit.register(self.stop)
+        atexit.register(self._shutdown)
+        
 
     def move(self, direction=Drivar.DIR_FORWARD,durationInMs=1000, callback = None):
         if (self.m_moving) :
@@ -53,112 +62,116 @@ class DrivarAdafruitDCMotorHat(Drivar):
         if callback is not None:
             callback()
     
-    
-    """
-      Internal method to control wheel rotation - the speed updates must be gradual to
-      obtain the best movement precision possible.
-    """
-    def _updateWheelsRotation(self, leftSetDirection = Drivar.DIR_FORWARD, rightSetDirection = Drivar.DIR_FORWARD, newDcMotorHatSpeed = 150, callback = None):
-        # Work out the steps required to affect speed differences between the current speed and the future one
-        leftReverseDirection = False
-        if(self.m_leftCurrentDirection != leftSetDirection):
-            leftReverseDirection = True
-        
-        leftSteps = [ ]
-        leftSpeedStart = ( ( -1 * self.m_currentSpeed ) if (m_leftCurrentDirection == Drivar.DIR_BACKWARD) else self.m_currentSpeed)
-        leftSpeedEnd = newDcMotorHatSpeed
-        
-        
-        # Step 2, work out ten steps that will bring our current speed to the required level
-        distance = abs(newSpeed - self.m_currentSpeed)
-        for x in range(1.1,0.1):
-            steps.append(pytweening.easeInOutCubic(x) * distance)
-        
-        # Step 2 bis, if we are decelerating, we simply reverse the sequence
-        if(not(accelerating)):
-            steps = steps.reverse()
-        
-        # Step 3, update the motors with their required direction
-        
-        
-        # Apply the speed change steps
-        for i in range(SPEED):
-            Motor.setSpeed(SPEED)
-            time.sleep(0.01)
-            self.m_frontLeftMotor.run(power)
-            self.m_backLeftMotor.run(power)
-        if(wheelSet == Drivar.WHEELS_RIGHT or wheelSet == Drivar.WHEELS_BOTH):
-            self.m_frontRightMotor.run(power)
-            self.m_backRightMotor.run(power)
-        self.m_moving = True
-        if callback is not None:
-            callback()
-
     def rotateWheels(self, wheelSet = Drivar.WHEELS_BOTH, direction = Drivar.DIR_FORWARD, speedLevel = Drivar.SPEED_FAST, callback = None):
-        speed = self._getDCMotorHatSpeed(speedLevel)
-        motorHatDirection = Adafruit_MotorHAT.FORWARD
-        if(direction == Drivar.DIR_BACKWARD):
-            motorHatDirection = Adafruit_MotorHAT.BACKWARD
-        motorControlSet = []
-        # Determine how many wheels we must affect
-        if(wheelSet == Drivar.WHEELS_BOTH):
-            motorControlSet = self.m_allMotors
-        if(wheelSet == Drivar.WHEELS_LEFT):
-            motorControlSet = self.m_leftMotors
-        if(wheelSet == Drivar.WHEELS_RIGHT):
-            motorControlSet = self.m_rightMotors
+        if (self.m_moving) :
+            self.stop()
+        power = self._getDCMotorHatSpeed(speedLevel)
+        motorsToActuate = []
         
-        for i in range(SPEED):
-            Motor.setSpeed(SPEED)
-            time.sleep(0.01)
-            self.m_frontLeftMotor.run(power)
-            self.m_backLeftMotor.run(power)
-        if(wheelSet == Drivar.WHEELS_RIGHT or wheelSet == Drivar.WHEELS_BOTH):
-            self.m_frontRightMotor.run(power)
-            self.m_backRightMotor.run(power)
-        self.m_moving = True
+        if direction == Drivar.DIR_FORWARD:
+            self.m_allMotors.run(Adafruit_MotorHAT.FORWARD)
+            motorsToActuate = self.m_allMotors
+        elif direction == Drivar.DIR_BACKWARD:
+            self.m_allMotors.run(Adafruit_MotorHAT.BACKWARD)
+            motorsToActuate = self.m_allMotors
+        elif direction == Drivar.DIR_LEFT:
+            for m in self.m_rightMotors:
+                m.run(Adafruit_MotorHAT.FORWARD)
+            for m in self.m_leftMotors:
+                m.run(Adafruit_MotorHAT.BACKWARD)
+            motorsToActuate = self.m_allMotors
+        elif direction == Drivar.DIR_RIGHT:
+            for m in self.m_leftMotors:
+                m.run(Adafruit_MotorHAT.FORWARD)
+            for m in self.m_rightMotors:
+                m.run(Adafruit_MotorHAT.BACKWARD)
+            motorsToActuate = self.m_allMotors
+        
+        self._actuateMotors(motorsToActuate, power)
+        
         if callback is not None:
             callback()
         
+    """
+       Turn the wheels in the given direction to the given angle.
+       Note that this class is using DC motors, so the resulting
+       rotation angle is very imprecise and offers no guarantees.
+    """
     def turn(self, direction = Drivar.DIR_LEFT, angle = 90, callback = None):
-        left_power = -100
-        right_power = 100
-        if(direction == Drivar.DIR_RIGHT):
-            left_power *= -1 
-            right_power *= -1
-        # TODO : Complete implementation
-        self.m_frontRightMotor.turn(left_power, angle)
-        self.m_rightMotor.turn(right_power, angle)
+        if (direction == Drivar.DIR_PORTSIDE or direction == Drivar.DIR_LEFT):
+            for m in self.m_rightMotors:
+                m.run(Adafruit_MotorHAT.FORWARD)
+            for m in self.m_leftMotors:
+                m.run(Adafruit_MotorHAT.BACKWARD)
+        elif (direction == Drivar.DIR_STARBOARD or direction == Drivar.DIR_RIGHT):
+            for m in self.m_leftMotors:
+                m.run(Adafruit_MotorHAT.FORWARD)
+            for m in self.m_rightMotors:
+                m.run(Adafruit_MotorHAT.BACKWARD)
+        
+        motorsToActuate = self.m_allMotors
+        self._actuateMotors(motorsToActuate, self._getDCMotorHatSpeed(Drivar.SPEED_MEDIUM))
+        time.sleep( (angle/90) * 0.03 )
+        self.stop()
+        
+        if callback is not None:
+            callback()
 
-
-    
-    
-    def stop(self, callback = None):
-        if(self.m_moving):
-            for i in reversed(range(self.m_currentSpeed)):
-                for m in self.m_allMotors:
-                    m.setSpeed(i)
+    """ 
+       Internal method to ramp up the speed of the given list of motors
+       to a target power level
+    """
+    def _actuateMotors(self, motorsToActuate, power):
+        self.m_moving = True
+        for x in range(power, 20):
+            for motor in motorsToActuate:
+                motor.setSpeed(x)
                 time.sleep(0.01)
+        for motor in motorsToActuate:
+                motor.setSpeed(power)        
+        self.m_currentSpeed = power
+    
+    """
+      Brings all the motors to a stop (ramp down the speed quickly if
+      the motors are currently running)
+    """
+    def stop(self, callback = None):
+        if self.m_moving :
+            for x in range(self.m_currentSpeed, 0, -20):
+                for m in self.m_allMotors:
+                    m.setSpeed(x)
+                    time.sleep(0.01)
         for m in self.m_allMotors:
             m.run(Adafruit_MotorHAT.RELEASE)
+        time.sleep(0.1)
         self.m_moving = False
-        self.m_currentSpeed = 0
         if callback is not None:
-            callback()
- 
+                callback()
+        
     '''
       Return the distance to the nearest obstacle, in centimeters
     '''
     def getDistanceToObstacle(self):
-        # TODO : Add ultrasonic sensor support
-        return 200
- 
+        GPIO.output(TRIG, False)
+        time.sleep(1)
+    	GPIO.output(TRIG, True)
+    	time.sleep(0.00001)
+    	GPIO.output(TRIG, False)
+        while GPIO.input(ECHO)==0:
+            pulse_start = time.time()
+        while GPIO.input(ECHO)==1:
+            pulse_end = time.time()
+        pulse_duration = pulse_end - pulse_start
+        distance = pulse_duration * 17150
+        distance = round(distance, 2)
+
+        return distance
+
     '''
       Indicate with a boolean whether there is an obstacle within the given distance
     '''
     def isObstacleWithin(self, distance):
-        # TODO : Add ultrasonic sensor support
-        return False
+        return (self.getDistanceToObstacle() <= distance)
     
     def rotatePen(self, angle):
         pass
@@ -169,19 +182,24 @@ class DrivarAdafruitDCMotorHat(Drivar):
     def wait(self, milliseconds):
         time.sleep(milliseconds/1000)
 
+    def _shutdown(self):
+        self.stop()
+        GPIO.cleanup()
+
+
     '''
       Return the Adafruit Motor HAT speed equivalent for the given DRIVAR speed flag
     '''
     @staticmethod
     def _getDCMotorHatSpeed(speed):
         if(speed==Drivar.SPEED_SLOW):
-            return 150
+            return 75
         elif(speed==Drivar.SPEED_MEDIUM):
             return 200
         elif(speed==Drivar.SPEED_FAST):
             return 255
         else :
-            return 150 
+            return 75
 
 Drivar.register(DrivarAdafruitDCMotorHat)
 
