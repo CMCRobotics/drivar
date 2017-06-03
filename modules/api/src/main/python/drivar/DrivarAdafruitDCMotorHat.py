@@ -69,23 +69,23 @@ class DrivarAdafruitDCMotorHat(Drivar):
         motorsToActuate = []
         
         if direction == Drivar.DIR_FORWARD:
-            self.m_allMotors.run(Adafruit_MotorHAT.FORWARD)
-            motorsToActuate = self.m_allMotors
+            for m in self.m_allMotors:
+                m.run(Adafruit_MotorHAT.FORWARD)
         elif direction == Drivar.DIR_BACKWARD:
-            self.m_allMotors.run(Adafruit_MotorHAT.BACKWARD)
-            motorsToActuate = self.m_allMotors
+            for m in self.m_allMotors:
+                m.run(Adafruit_MotorHAT.BACKWARD)
         elif direction == Drivar.DIR_LEFT:
             for m in self.m_rightMotors:
                 m.run(Adafruit_MotorHAT.FORWARD)
             for m in self.m_leftMotors:
                 m.run(Adafruit_MotorHAT.BACKWARD)
-            motorsToActuate = self.m_allMotors
         elif direction == Drivar.DIR_RIGHT:
             for m in self.m_leftMotors:
                 m.run(Adafruit_MotorHAT.FORWARD)
             for m in self.m_rightMotors:
                 m.run(Adafruit_MotorHAT.BACKWARD)
-            motorsToActuate = self.m_allMotors
+        
+        motorsToActuate = self.m_allMotors
         
         self._actuateMotors(motorsToActuate, power)
         
