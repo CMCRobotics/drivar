@@ -111,7 +111,7 @@ class DrivarAdafruitDCMotorHat(Drivar):
         
         motorsToActuate = self.m_allMotors
         self._actuateMotors(motorsToActuate, self._getDCMotorHatSpeed(Drivar.SPEED_MEDIUM))
-        time.sleep( (angle/90) * 0.03 )
+        time.sleep( (angle/90) * 0.9 )
         self.stop()
         
         if callback is not None:
