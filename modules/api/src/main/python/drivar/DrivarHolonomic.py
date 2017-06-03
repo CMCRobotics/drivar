@@ -104,6 +104,9 @@ class DrivarHolonomic(Drivar):
         self._actuateMotors(motorsToActuate, self._getDCMotorHatSpeed(Drivar.SPEED_MEDIUM))
         time.sleep( (angle/90) * 0.01 )
         self.stop()
+        
+        if callback is not None:
+            callback()
 
     """ 
        Internal method to ramp up the speed of the given list of motors
