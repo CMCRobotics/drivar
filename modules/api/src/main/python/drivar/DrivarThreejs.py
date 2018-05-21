@@ -1,4 +1,4 @@
-#  Driver library for Raspbuggy - Noop implementation for simulation and testing
+#  Driver library for Raspbuggy - Threejs / Brython implementation for simulation and testing
 '''
 Created on Jun 01, 2015
 
@@ -9,18 +9,17 @@ from drivar.Drivar import Drivar
 import time
 import logging
 
-class DrivarNoop(Drivar):
+class DrivarThreejs(Drivar):
     
     def __init__(self, enforceSleepingTime=False):
         self.m_initialized = False
         self.m_moving = False
-        self.m_logger = logging.getLogger(__name__)
         self.m_enforceSleepingTime = enforceSleepingTime
         self.m_distanceToNextObstacle = 2000
 
     def initialize(self):
-        super(DrivarNoop,self).initialize()
-        self.m_logger.debug("Drivar : initialized")
+        super(DrivarThreejs,self).initialize()
+        print("Drivar : initialized")
         self.m_initialized = True
         
 
@@ -50,16 +49,16 @@ class DrivarNoop(Drivar):
         if(wheelSet == Drivar.WHEELS_RIGHT):
             wheelSet = 'right'
         
-        self.m_logger.info("Drivar : Moving %s wheels with power %d.", wheelSet,power)
+        print("Drivar : Moving %s wheels with power %d.", wheelSet,power)
         self.m_moving = True
         if callback is not None:
             callback()
         
     def turn(self, direction = Drivar.DIR_LEFT, angle = 90, callback = None):
         _dir = "left"
-        if(direction == DrivarDIR_RIGHT):
+        if(direction == Drivar.DIR_RIGHT):
             _dir = "right"
-        self.m_logger.info("Drivar : Turning the vehicle %s by %d degrees.",_dir,angle)
+        print("Drivar : Turning the vehicle %s by %d degrees.",_dir,angle)
         if(self.m_enforceSleepingTime):
             time.sleep(0.5)
         if callback is not None:
@@ -67,35 +66,35 @@ class DrivarNoop(Drivar):
     
     def stop(self, callback = None):
         self.m_moving = False
-        self.m_logger.info("Drivar : Stopping the vehicle.")
+        print("Drivar : Stopping the vehicle.")
         if callback is not None:
             callback()
  
     def setDistanceToObstacle(self, distance):
-        self.m_logger.info("Drivar : Set distance to next obstacle : %d cm", distance)
+        print("Drivar : Set distance to next obstacle : %d cm", distance)
         self.m_distanceToNextObstacle = distance
     '''
       Return the distance to the nearest obstacle, in centimeters
     '''
     def getDistanceToObstacle(self):
-        self.m_logger.info("Drivar : Getting distance to obstacle.")
+        print("Drivar : Getting distance to obstacle.")
         return self.m_distanceToNextObstacle
  
     '''
       Indicate with a boolean whether there is an obstacle within the given distance
     '''
     def isObstacleWithin(self, distance):
-        self.m_logger.debug("Drivar : Measuring whether obstacle is within %d cms", distance)
+        print("Drivar : Measuring whether obstacle is within %d cms", distance)
         dist = self.m_distanceToNextObstacle
         if(dist <= distance):
-            self.m_logger.info("Drivar : Obstacle found within %d cms", distance)
+            print("Drivar : Obstacle found within %d cms", distance)
             return True
         else:
-            self.m_logger.info("Drivar : Obstacle NOT found within %d cms", distance)
+            print("Drivar : Obstacle NOT found within %d cms", distance)
             return False
     
     def rotatePen(self, angle):
-        self.m_logger.info("Drivar : Rotating the pen by %d degrees", angle)
+        print("Drivar : Rotating the pen by %d degrees", angle)
 
     def getReflectivityMeasurement(self):
         return 150
@@ -118,7 +117,8 @@ class DrivarNoop(Drivar):
         else :
             return 100 
 
-Drivar.register(DrivarNoop)
+Drivar.register(DrivarThreejs)
 
 if __name__ == '__main__':
-    _drivar = DrivarNoop()
+    _drivar = DrivarThreejs()
+

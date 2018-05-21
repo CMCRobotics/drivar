@@ -9,8 +9,7 @@ import time
 
 
 
-class Drivar(object):
-    __metaclass__ = ABCMeta
+class Drivar(metaclass=ABCMeta):
 
     DIR_FORWARD = 0x01
     DIR_BACKWARD = 0x02
