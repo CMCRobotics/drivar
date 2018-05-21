@@ -1,0 +1,38 @@
+<html>
+<head>
+    <title>Getting Started with Three.js - Brython version</title>
+    <meta charset="iso-8859-1">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/three.js/r79/three.min.js"></script>
+    <script type="text/javascript" src="brython.js"></script>
+    <script type="text/javascript" src="brython_stdlib.js"></script>
+
+    
+    <script type="text/python">
+        print('start ...')
+        import sys
+        from drivar.Drivar import Drivar
+        from drivar.DrivarThreejs import DrivarThreejs
+        from browser import document as doc
+        from browser import window
+        from javascript import JSObject,JSConstructor
+        import logging
+
+        logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+        
+        drivar = DrivarThreejs()
+        drivar.initialize()
+        
+        drivar.move()
+        drivar.turn()
+
+        drivar.rotateWheels()
+        
+        drivar.stop()
+        
+    </script>
+
+</head>
+<body onload="brython(1)">
+    <div id="test"></div>
+</body>
+</html>
