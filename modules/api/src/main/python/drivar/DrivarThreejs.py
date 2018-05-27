@@ -104,7 +104,7 @@ class DrivarThreejs(Drivar):
         time.sleep(milliseconds/1000)
 
     '''
-      Return the NXT speed equivalent for the given DRIVAR speed flag
+      Return the speed equivalent for the given DRIVAR speed flag
     '''
     @staticmethod
     def _getNxtSpeed(speed):
