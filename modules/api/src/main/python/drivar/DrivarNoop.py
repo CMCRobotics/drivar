@@ -24,18 +24,18 @@ class DrivarNoop(Drivar):
         self.m_initialized = True
         
 
-    def move(self, direction=Drivar.DIR_FORWARD,durationInMs=1000, callback = None):
+    def motor_move(self, direction=Drivar.DIR_FORWARD,durationInMs=1000, speed = Drivar.SPEED_SLOW, callback = None):
         durationInMs = max(durationInMs,100)
         _direct = direction
-        self.rotateWheels(direction = _direct)
-        if(self.m_enforceSleepingTime):
-            time.sleep(durationInMs/1000)
+        _speed = speed
+        self.rotateWheels(direction = _direct, speed = _speed)
+        self.wait(durationInMs/1000)
         self.stop()
         if callback is not None:
             callback()
     
-    def rotateWheels(self, wheelSet = Drivar.WHEELS_BOTH, direction = Drivar.DIR_FORWARD, speedLevel = Drivar.SPEED_FAST, callback = None):
-        power = self._getNxtSpeed(speedLevel)
+    def motor_rotateWheels(self, wheelSet = Drivar.WHEELS_BOTH, direction = Drivar.DIR_FORWARD, speed = Drivar.SPEED_SLOW, callback = None):
+        power = self._getMotorPowerLevel(speedLevel)
         # Correct the power (positive vs negative) depending on the direction
         if(direction == Drivar.DIR_FORWARD):
             if(power < 0):
@@ -55,36 +55,35 @@ class DrivarNoop(Drivar):
         if callback is not None:
             callback()
         
-    def turn(self, direction = Drivar.DIR_LEFT, angle = 90, callback = None):
+    def motor_turn(self, direction = Drivar.DIR_LEFT, angle = 90, callback = None):
         _dir = "left"
         if(direction == DrivarDIR_RIGHT):
             _dir = "right"
         self.m_logger.info("Drivar : Turning the vehicle %s by %d degrees.",_dir,angle)
-        if(self.m_enforceSleepingTime):
-            time.sleep(0.5)
+        self.wait(0.5)
         if callback is not None:
             callback()
     
-    def stop(self, callback = None):
+    def motor_stop(self, callback = None):
         self.m_moving = False
         self.m_logger.info("Drivar : Stopping the vehicle.")
         if callback is not None:
             callback()
  
-    def setDistanceToObstacle(self, distance):
+    def range_setDistanceToObstacle(self, distance):
         self.m_logger.info("Drivar : Set distance to next obstacle : %d cm", distance)
         self.m_distanceToNextObstacle = distance
     '''
       Return the distance to the nearest obstacle, in centimeters
     '''
-    def getDistanceToObstacle(self):
+    def range_getDistanceToObstacle(self):
         self.m_logger.info("Drivar : Getting distance to obstacle.")
         return self.m_distanceToNextObstacle
  
     '''
       Indicate with a boolean whether there is an obstacle within the given distance
     '''
-    def isObstacleWithin(self, distance):
+    def range_isObstacleWithin(self, distance):
         self.m_logger.debug("Drivar : Measuring whether obstacle is within %d cms", distance)
         dist = self.m_distanceToNextObstacle
         if(dist <= distance):
@@ -97,18 +96,19 @@ class DrivarNoop(Drivar):
     def rotatePen(self, angle):
         self.m_logger.info("Drivar : Rotating the pen by %d degrees", angle)
 
-    def getReflectivityMeasurement(self):
+    def reflectivity_get(self):
         return 150
         #return self.m_lightSensor.get_sample()
         
     def wait(self, milliseconds):
-        time.sleep(milliseconds/1000)
+        if(self.m_enforceSleepingTime):
+            time.sleep(milliseconds/1000)
 
     '''
       Return the NXT speed equivalent for the given DRIVAR speed flag
     '''
     @staticmethod
-    def _getNxtSpeed(speed):
+    def _getMotorPowerLevel(speed):
         if(speed==Drivar.SPEED_SLOW):
             return 70
         elif(speed==Drivar.SPEED_MEDIUM):

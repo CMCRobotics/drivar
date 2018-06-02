@@ -35,7 +35,7 @@ class DrivarNxt(Drivar):
         self.m_initialized = True
         
 
-    def move(self, direction=Drivar.DIR_FORWARD,durationInMs=1000, callback = None):
+    def motor_move(self, direction=Drivar.DIR_FORWARD,durationInMs=1000, speed = Drivar.SPEED_SLOW, callback = None):
         durationInMs = max(durationInMs,100)
         _direct = direction
         self.rotateWheels(direction = _direct)
@@ -44,7 +44,7 @@ class DrivarNxt(Drivar):
         if callback is not None:
             callback()
     
-    def rotateWheels(self, wheelSet = Drivar.WHEELS_BOTH, direction = Drivar.DIR_FORWARD, speedLevel = Drivar.SPEED_FAST, callback = None):
+    def motor_rotateWheels(self, wheelSet = Drivar.WHEELS_BOTH, direction = Drivar.DIR_FORWARD, speed = Drivar.SPEED_SLOW, callback = None):
         power = self._getNxtSpeed(speedLevel)
         # Correct the power (positive vs negative) depending on the direction
         if(direction == Drivar.DIR_FORWARD):
@@ -62,7 +62,7 @@ class DrivarNxt(Drivar):
         if callback is not None:
             callback()
         
-    def turn(self, direction = Drivar.DIR_LEFT, angle = 90, callback = None):
+    def motor_turn(self, direction = Drivar.DIR_LEFT, angle = 90, callback = None):
         left_power = -100
         right_power = 100
         if(direction == Drivar.DIR_RIGHT):
@@ -74,7 +74,7 @@ class DrivarNxt(Drivar):
 
     
     
-    def stop(self, callback = None):
+    def motor_stop(self, callback = None):
         self.m_leftMotor.idle()
         self.m_rightMotor.idle()
         self.m_moving = False
@@ -86,27 +86,27 @@ class DrivarNxt(Drivar):
     '''
       Return the distance to the nearest obstacle, in centimeters
     '''
-    def getDistanceToObstacle(self):
+    def range_getDistanceToObstacle(self):
         return self.m_ultrasonicSensor.get_sample()
  
     '''
       Indicate with a boolean whether there is an obstacle within the given distance
     '''
-    def isObstacleWithin(self, distance):
+    def range_isObstacleWithin(self, distance):
         dist = self.m_ultrasonicSensor.get_sample()
         if(dist <= distance):
             return True
         else:
             return False
     
-    def rotatePen(self, angle):
+    def pen_rotate(self, angle):
         power = 70
         if angle < 0:
             angle = -1 * angle
             power = -70
         self.m_penMotor.turn(power, angle)
 
-    def getReflectivityMeasurement(self):
+    def reflectivity_get(self):
         self.m_lightSensor.set_illuminated(True)
         return self.m_lightSensor.get_sample()
         

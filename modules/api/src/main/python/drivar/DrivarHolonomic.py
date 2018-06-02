@@ -12,15 +12,6 @@ import RPi.GPIO as GPIO
 import atexit
 import time
 
-GPIO.setmode(GPIO.BCM)
-
-TRIG = 17
-ECHO = 18
-
-GPIO.setup(TRIG,GPIO.OUT)
-GPIO.setup(ECHO,GPIO.IN)
-GPIO.output(TRIG, False)
-
 class DrivarHolonomic(Drivar):
     
     def __init__(self):
@@ -48,7 +39,7 @@ class DrivarHolonomic(Drivar):
         atexit.register(self._shutdown)
         
 
-    def move(self, direction=Drivar.DIR_FORWARD,durationInMs=1000, callback = None):
+    def motor_move(self, direction=Drivar.DIR_FORWARD,durationInMs=1000, callback = None):
         if (self.m_moving) :
             self.stop()
         durationInMs = max(durationInMs,100)
@@ -59,7 +50,7 @@ class DrivarHolonomic(Drivar):
         if callback is not None:
             callback()
     
-    def rotateWheels(self, wheelSet = Drivar.WHEELS_BOTH, direction = Drivar.DIR_FORWARD, speedLevel = Drivar.SPEED_FAST, callback = None):
+    def motor_rotateWheels(self, wheelSet = Drivar.WHEELS_BOTH, direction = Drivar.DIR_FORWARD, speedLevel = Drivar.SPEED_FAST, callback = None):
         if (self.m_moving) :
             self.stop()
         power = self._getDCMotorHatSpeed(speedLevel)
@@ -92,7 +83,7 @@ class DrivarHolonomic(Drivar):
        Note that this class is using DC motors, so the resulting
        rotation angle is very imprecise and offers no guarantees.
     """
-    def turn(self, direction = Drivar.DIR_PORTSIDE, angle = 90, callback = None):
+    def motor_turn(self, direction = Drivar.DIR_PORTSIDE, angle = 90, callback = None):
         if (direction == Drivar.DIR_PORTSIDE or direction == Drivar.DIR_LEFT):
             for m in self.m_motorsOdd:
                 m.run(Adafruit_MotorHAT.BACKWARD)
@@ -126,7 +117,7 @@ class DrivarHolonomic(Drivar):
       Brings all the motors to a stop (ramp down the speed quickly if
       the motors are currently running)
     """
-    def stop(self, callback = None):
+    def motor_stop(self, callback = None):
         if self.m_moving :
             for x in range(self.m_currentSpeed, 0, -20):
                 for m in self.m_allMotors:
@@ -142,7 +133,7 @@ class DrivarHolonomic(Drivar):
     '''
       Return the distance to the nearest obstacle, in centimeters
     '''
-    def getDistanceToObstacle(self):
+    def range_getDistanceToObstacle(self):
         GPIO.output(TRIG, False)
         time.sleep(1)
     	GPIO.output(TRIG, True)
@@ -161,13 +152,13 @@ class DrivarHolonomic(Drivar):
     '''
       Indicate with a boolean whether there is an obstacle within the given distance
     '''
-    def isObstacleWithin(self, distance):
+    def range_isObstacleWithin(self, distance):
         return (self.getDistanceToObstacle() <= distance)
     
-    def rotatePen(self, angle):
+    def pen_rotate(self, angle):
         pass
 
-    def getReflectivityMeasurement(self):
+    def reflectivity_get(self):
         return 0
         
     def wait(self, milliseconds):

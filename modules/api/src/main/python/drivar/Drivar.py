@@ -36,51 +36,47 @@ class Drivar(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def move(self, direction = DIR_FORWARD,durationInMs=1000, callback = None):
+    def motor_move(self, direction = Drivar.DIR_FORWARD,durationInMs=1000, speed = Drivar.SPEED_SLOW, callback = None):
         pass
     
     @abstractmethod
-    def rotateWheels(self, wheelSet = WHEELS_BOTH, direction = DIR_FORWARD, speedLevel = SPEED_FAST, callback = None):
+    def motor_rotateWheels(self, wheelSet = Drivar.WHEELS_BOTH, direction = Drivar.DIR_FORWARD, speed = Drivar.SPEED_SLOW, callback = None):
         pass
     
     @abstractmethod
-    def turn(self, direction = DIR_LEFT, angle = 90, callback = None):
+    def motor_turn(self, direction = Drivar.DIR_LEFT, angle = 90, callback = None):
         pass
 
     @abstractmethod
-    def stop(self, callback = None):
+    def motor_stop(self, callback = None):
         pass
  
     '''
       Return the distance to the nearest obstacle, in centimeters
     '''
     @abstractmethod
-    def getDistanceToObstacle(self):
+    def range_getDistanceToObstacle(self):
         pass
  
     '''
       Indicate with a boolean whether there is an obstacle within the given distance
     '''
     @abstractmethod
-    def isObstacleWithin(self, distance):
+    def range_isObstacleWithin(self, distance):
         pass
         
     def wait(self, duration = 1000):
-        time.sleep(duration)
+        time.sleep(duration/1000)
         
     '''
       Orders the pen to be raised or lowered
     '''
     @abstractmethod
-    def rotatePen(self, angle):
+    def pen_rotate(self, angle):
         pass
 
     @abstractmethod
-    def getReflectivityMeasurement(self):
-        pass
-
-    @abstractmethod
-    def wait(self, milliseconds):
+    def reflectivity_get(self):
         pass
 
 
