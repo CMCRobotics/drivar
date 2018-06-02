@@ -15,24 +15,24 @@ import time
 class DrivarNxt(Drivar):
     
     def __init__(self):
-        self.m_initialized = False
-        self.m_block = None
-        self.m_leftMotor = None
-        self.m_rightMotor = None
-        self.m_penMotor = None
-        self.m_ultrasonicSensor = None
-        self.m_lightSensor = None
-        self.m_moving = False
+        self.initialized = False
+        self.block = None
+        self.leftMotor = None
+        self.rightMotor = None
+        self.penMotor = None
+        self.ultrasonicSensor = None
+        self.lightSensor = None
+        self.moving = False
 
     def initialize(self):
         super(DrivarNxt,self).initialize()
-        self.m_block = nxt.locator.find_one_brick()
-        self.m_leftMotor = Motor(self.m_block, PORT_A)
-        self.m_rightMotor = Motor(self.m_block, PORT_C)
-        self.m_penMotor = Motor(self.m_block, PORT_B)
-        self.m_ultrasonicSensor = Ultrasonic(self.m_block, PORT_4)
-        self.m_lightSensor = Light(self.m_block, PORT_3)
-        self.m_initialized = True
+        self.block = nxt.locator.find_one_brick()
+        self.leftMotor = Motor(self.block, PORT_A)
+        self.rightMotor = Motor(self.block, PORT_C)
+        self.penMotor = Motor(self.block, PORT_B)
+        self.ultrasonicSensor = Ultrasonic(self.block, PORT_4)
+        self.lightSensor = Light(self.block, PORT_3)
+        self.initialized = True
         
 
     def motor_move(self, direction=Drivar.DIR_FORWARD,durationInMs=1000, speed = Drivar.SPEED_SLOW, callback = None):
@@ -55,10 +55,10 @@ class DrivarNxt(Drivar):
                 power = power * -1
         # Get the wheels turning
         if(wheelSet == Drivar.WHEELS_LEFT or wheelSet == Drivar.WHEELS_BOTH):
-            self.m_leftMotor.run(power)
+            self.leftMotor.run(power)
         if(wheelSet == Drivar.WHEELS_RIGHT or wheelSet == Drivar.WHEELS_BOTH):
-            self.m_rightMotor.run(power)
-        self.m_moving = True
+            self.rightMotor.run(power)
+        self.moving = True
         if callback is not None:
             callback()
         
@@ -68,16 +68,16 @@ class DrivarNxt(Drivar):
         if(direction == Drivar.DIR_RIGHT):
             left_power *= -1 
             right_power *= -1
-        self.m_leftMotor.turn(left_power, angle)
-        self.m_rightMotor.turn(right_power, angle)
+        self.leftMotor.turn(left_power, angle)
+        self.rightMotor.turn(right_power, angle)
 
 
     
     
     def motor_stop(self, callback = None):
-        self.m_leftMotor.idle()
-        self.m_rightMotor.idle()
-        self.m_moving = False
+        self.leftMotor.idle()
+        self.rightMotor.idle()
+        self.moving = False
         if callback is not None:
             callback()
         
@@ -87,13 +87,13 @@ class DrivarNxt(Drivar):
       Return the distance to the nearest obstacle, in centimeters
     '''
     def range_getDistanceToObstacle(self):
-        return self.m_ultrasonicSensor.get_sample()
+        return self.ultrasonicSensor.get_sample()
  
     '''
       Indicate with a boolean whether there is an obstacle within the given distance
     '''
     def range_isObstacleWithin(self, distance):
-        dist = self.m_ultrasonicSensor.get_sample()
+        dist = self.ultrasonicSensor.get_sample()
         if(dist <= distance):
             return True
         else:
@@ -104,15 +104,12 @@ class DrivarNxt(Drivar):
         if angle < 0:
             angle = -1 * angle
             power = -70
-        self.m_penMotor.turn(power, angle)
+        self.penMotor.turn(power, angle)
 
     def reflectivity_get(self):
-        self.m_lightSensor.set_illuminated(True)
-        return self.m_lightSensor.get_sample()
+        self.lightSensor.set_illuminated(True)
+        return self.lightSensor.get_sample()
         
-    def wait(self, milliseconds):
-        time.sleep(milliseconds/1000)
-
     '''
       Return the NXT speed equivalent for the given DRIVAR speed flag
     '''

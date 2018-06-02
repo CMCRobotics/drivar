@@ -1,5 +1,6 @@
 import unittest
-from DrivarNxt import DrivarNxt
+from drivar.Drivar import Drivar
+from drivar.DrivarNxt import DrivarNxt
 
 
 class TestDrivarNxt(unittest.TestCase):
