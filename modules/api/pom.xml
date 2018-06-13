@@ -13,9 +13,12 @@
   <build>
     <plugins>
 		<plugin>
-			<groupId>maven-python-mojos</groupId>
+			<groupId>com.github.UltimateDogg</groupId>
 			<artifactId>maven-python-distribute-plugin</artifactId>
 			<version>0.2.6</version>
+			<configuration>
+			  <pythonExecutable>python3</pythonExecutable>
+			</configuration>
 			<executions>
 				<execution>
                         <id>package</id>
