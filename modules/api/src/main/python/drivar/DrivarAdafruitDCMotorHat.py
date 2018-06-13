@@ -154,9 +154,9 @@ class DrivarAdafruitDCMotorHat(Drivar):
     def getDistanceToObstacle(self):
         GPIO.output(TRIG, False)
         time.sleep(1)
-    	GPIO.output(TRIG, True)
-    	time.sleep(0.00001)
-    	GPIO.output(TRIG, False)
+        GPIO.output(TRIG, True)
+        time.sleep(0.00001)
+        GPIO.output(TRIG, False)
         while GPIO.input(ECHO)==0:
             pulse_start = time.time()
         while GPIO.input(ECHO)==1:
