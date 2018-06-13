@@ -29,7 +29,7 @@ class DrivarNoop(Drivar):
         _direct = direction
         _speed = speed
         self.motor_rotateWheels(direction = _direct, speed = _speed)
-        self.wait(durationInMs/1000)
+        self.time_wait(durationInMs/1000)
         self.motor_stop()
         if callback is not None:
             callback()
@@ -60,7 +60,7 @@ class DrivarNoop(Drivar):
         if(direction == Drivar.DIR_RIGHT):
             _dir = "right"
         self.logger.info("Drivar : Turning the vehicle %s by %d degrees.",_dir,angle)
-        self.wait(0.5)
+        self.time_wait(0.5)
         if callback is not None:
             callback()
     
