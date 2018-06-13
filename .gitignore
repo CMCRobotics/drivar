@@ -9,3 +9,7 @@ buildNumber.properties
 .mvn/timing.properties
 *~
 *#
+.pydev*
+.project
+.classpath
+*.pyc
