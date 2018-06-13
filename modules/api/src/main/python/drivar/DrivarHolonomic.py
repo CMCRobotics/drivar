@@ -11,6 +11,7 @@ from Adafruit_MotorHAT import Adafruit_MotorHAT, Adafruit_DCMotor
 import RPi.GPIO as GPIO
 import atexit
 import time
+import logging
 
 class DrivarHolonomic(Drivar):
     
@@ -41,18 +42,18 @@ class DrivarHolonomic(Drivar):
 
     def motor_move(self, direction=Drivar.DIR_FORWARD,durationInMs=1000, callback = None):
         if (self.moving) :
-            self.stop()
+            self.motor_stop()
         durationInMs = max(durationInMs,100)
         _direct = direction
-        self.rotateWheels(direction = _direct)
-        time.sleep(durationInMs/1000)
-        self.stop()
+        self.motor_rotateWheels(direction = _direct)
+        self.time_wait(durationInMs)
+        self.motor_stop()
         if callback is not None:
             callback()
     
     def motor_rotateWheels(self, wheelSet = Drivar.WHEELS_BOTH, direction = Drivar.DIR_FORWARD, speedLevel = Drivar.SPEED_FAST, callback = None):
         if (self.moving) :
-            self.stop()
+            self.motor_stop()
         power = self._getDCMotorHatSpeed(speedLevel)
         motorsToActuate = []
         
@@ -94,7 +95,7 @@ class DrivarHolonomic(Drivar):
         motorsToActuate = self.allMotors
         self._actuateMotors(motorsToActuate, self._getDCMotorHatSpeed(Drivar.SPEED_MEDIUM))
         time.sleep( (angle/90) * 0.01 )
-        self.stop()
+        self.motor_stop()
         
         if callback is not None:
             callback()
@@ -134,20 +135,20 @@ class DrivarHolonomic(Drivar):
       Return the distance to the nearest obstacle, in centimeters
     '''
     def range_getDistanceToObstacle(self):
-        GPIO.output(TRIG, False)
-        time.sleep(1)
-        GPIO.output(TRIG, True)
-        time.sleep(0.00001)
-        GPIO.output(TRIG, False)
-        while GPIO.input(ECHO)==0:
-            pulse_start = time.time()
-        while GPIO.input(ECHO)==1:
-            pulse_end = time.time()
-        pulse_duration = pulse_end - pulse_start
-        distance = pulse_duration * 17150
-        distance = round(distance, 2)
-
-        return distance
+#         GPIO.output(TRIG, False)
+#         time.sleep(1)
+#         GPIO.output(TRIG, True)
+#         time.sleep(0.00001)
+#         GPIO.output(TRIG, False)
+#         while GPIO.input(ECHO)==0:
+#             pulse_start = time.time()
+#         while GPIO.input(ECHO)==1:
+#             pulse_end = time.time()
+#         pulse_duration = pulse_end - pulse_start
+#         distance = pulse_duration * 17150
+#         distance = round(distance, 2)
+#         return distance
+        return 200
 
     '''
       Indicate with a boolean whether there is an obstacle within the given distance
@@ -163,7 +164,7 @@ class DrivarHolonomic(Drivar):
         
 
     def _shutdown(self):
-        self.stop()
+        self.motor_stop()
         GPIO.cleanup()
 
 
