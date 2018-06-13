@@ -10,7 +10,7 @@ import time
 
 class DrivarThreejs(Drivar):
     
-    def __init__(self, enforceSleepingTime=False):
+    def __init__(self, enforceSleepingTime=True):
         self.m_initialized = False
         self.m_moving = False
         self.m_enforceSleepingTime = enforceSleepingTime
@@ -33,7 +33,7 @@ class DrivarThreejs(Drivar):
             callback()
     
     def motor_rotateWheels(self, wheelSet = Drivar.WHEELS_BOTH, direction = Drivar.DIR_FORWARD, speed = Drivar.SPEED_SLOW, callback = None):
-        power = self._getNxtSpeed(speedLevel)
+        power = self._getMovementSpeed(speed)
         # Correct the power (positive vs negative) depending on the direction
         if(direction == Drivar.DIR_FORWARD):
             if(power < 0):
@@ -108,7 +108,7 @@ class DrivarThreejs(Drivar):
       Return the speed equivalent for the given DRIVAR speed flag
     '''
     @staticmethod
-    def _getNxtSpeed(speed):
+    def _getMovementSpeed(speed):
         if(speed==Drivar.SPEED_SLOW):
             return 70
         elif(speed==Drivar.SPEED_MEDIUM):

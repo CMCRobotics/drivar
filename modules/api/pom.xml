@@ -2,34 +2,42 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.raspbuggy</groupId>
     <artifactId>drivar</artifactId>
-    <version>0.2.5</version>
+    <version>0.5.0</version>
     <name>Raspbuggy - Drivar hardware abstraction layer</name>
     <packaging>jar</packaging>
 	
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    
-    
-  <dependencies>
-  </dependencies>
 
   <build>
     <plugins>
 		<plugin>
 			<groupId>maven-python-mojos</groupId>
 			<artifactId>maven-python-distribute-plugin</artifactId>
-			<version>0.1.4</version>
+			<version>0.2.6</version>
 			<executions>
 				<execution>
-					<goals>
-						<goal>package</goal>
-						<goal>install</goal>
-					</goals>
-				</execution>
+                        <id>package</id>
+                        <goals> <goal>package</goal> </goals>
+                </execution>
+                <execution>
+                        <id>process</id>
+                        <goals> <goal>process-sources</goal> </goals>
+                </execution>
+                <execution>
+                        <id>install</id>
+                        <goals> <goal>install</goal> </goals>
+                </execution>
 			</executions>
 		</plugin>
     </plugins>
   </build>
-
+  
+    <pluginRepositories>
+            <pluginRepository>
+                    <id>jitpack.io</id>
+                    <url>https://jitpack.io</url>
+            </pluginRepository>
+    </pluginRepositories>
 </project>
