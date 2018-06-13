@@ -7,6 +7,7 @@ setup(
          'nxt':['nxt-python==2.2.2']
       },
       name = '${PROJECT_NAME}',
+      python_requires= '>=3.4.0',
       description = 'Hardware abstraction layer for Raspbuggy and GianoPi robots',
       author = 'Brice Copy',
       author_email = 'brice.copy@gmail.com',
