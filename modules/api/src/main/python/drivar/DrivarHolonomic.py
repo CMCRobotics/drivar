@@ -93,8 +93,8 @@ class DrivarHolonomic(Drivar):
                 m.run(Adafruit_MotorHAT.FORWARD)
         
         motorsToActuate = self.allMotors
-        self._actuateMotors(motorsToActuate, self._getDCMotorHatSpeed(Drivar.SPEED_MEDIUM))
-        time.sleep( (angle/90) * 0.01 )
+        self._actuateMotors(motorsToActuate, self._getDCMotorHatSpeed(Drivar.SPEED_SLOW))
+        time.sleep( (angle/90) * 0.2 )
         self.motor_stop()
         
         if callback is not None:
@@ -106,7 +106,7 @@ class DrivarHolonomic(Drivar):
     """
     def _actuateMotors(self, motorsToActuate, power):
         self.moving = True
-        for x in range(power, 20):
+        for x in range(power,10):
             for motor in motorsToActuate:
                 motor.setSpeed(x)
                 time.sleep(0.01)
@@ -120,7 +120,7 @@ class DrivarHolonomic(Drivar):
     """
     def motor_stop(self, callback = None):
         if self.moving :
-            for x in range(self.currentSpeed, 0, -20):
+            for x in range(self.currentSpeed, 0, -10):
                 for m in self.allMotors:
                     m.setSpeed(x)
                     time.sleep(0.01)
@@ -174,13 +174,13 @@ class DrivarHolonomic(Drivar):
     @staticmethod
     def _getDCMotorHatSpeed(speed):
         if(speed==Drivar.SPEED_SLOW):
-            return 75
+            return 100
         elif(speed==Drivar.SPEED_MEDIUM):
             return 200
         elif(speed==Drivar.SPEED_FAST):
             return 255
         else :
-            return 75
+            return 100
 
 Drivar.register(DrivarHolonomic)
 
