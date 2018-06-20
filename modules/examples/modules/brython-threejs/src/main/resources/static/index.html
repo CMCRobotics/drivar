@@ -3,6 +3,7 @@
     <title>Drivar with ThreeJS</title>
     <meta charset="iso-8859-1">
     <script type="text/javascript" src="/webjars/three.js/three.min.js"></script>
+    <script type="text/javascript" src="/webjars/tween.js/src/Tween.js"></script>
     
     <script type="text/javascript" src="three/three.orbitcontrol.r88.js"></script>
     <script type="text/javascript" src="/webjars/brython/brython.js"></script>
@@ -43,14 +44,14 @@
 				if ( camera === undefined ) {
 					camera = new THREE.PerspectiveCamera( 30, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 2000 );
 					camera.position.set( 0, 50, 0 );
-					camera.lookAt(0,0,0);
+					camera.lookAt(new THREE.Vector3(0,0,0));
 				}
 				gpi = scene.getObjectByName("GianoPi");
 				gpiSpotlight = scene.getObjectByName("GianoPi SpotLight");
 				//gianoPiSpotlight.intensity = 0;
 				controls = new THREE.OrbitControls( camera );
 				// Ground plane and fog: examples for applying additional children and new property values to the loaded scene
-				var geometry = new THREE.PlaneBufferGeometry( 20000, 20000 );
+				var geometry = new THREE.PlaneBufferGeometry( 40000, 40000 );
 				var material = new THREE.MeshPhongMaterial( { shininess: 0.1 } );
 				var ground = new THREE.Mesh( geometry, material );
 				ground.position.set( 0, - 250, 0 );
