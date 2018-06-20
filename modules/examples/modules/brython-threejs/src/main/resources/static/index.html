@@ -21,32 +21,33 @@
     
     <script>
 			var scene, camera, controls, stats;
-			var renderer, mixer;
+			var renderer;
 			var url = 'scene.json';
 			var SCREEN_WIDTH = window.innerWidth;
 			var SCREEN_HEIGHT = window.innerHeight;
 			var container = document.getElementById( 'test' );
+			var gpi;
+			var gpiSpotlight;
 			renderer = new THREE.WebGLRenderer( { antialias: true } );
 			renderer.setPixelRatio( window.devicePixelRatio );
 			renderer.setSize( SCREEN_WIDTH, SCREEN_HEIGHT );
+			renderer.shadowMapEnabled = true;
+			renderer.shadowMapSoft = false;
 			container.appendChild( renderer.domElement );
+			
 			// Load a scene with objects, lights and camera from a JSON file
 			new THREE.ObjectLoader().load( url, function ( loadedScene ) {
 				scene = loadedScene;
 				scene.background = new THREE.Color( 0xffffff );
-				// If the loaded file contains a perspective camera, use it with adjusted aspect ratio...
-				scene.traverse( function ( sceneChild ) {
-					if ( sceneChild.type === 'PerspectiveCamera' ) {
-						camera = sceneChild;
-						camera.aspect = SCREEN_WIDTH / SCREEN_HEIGHT;
-						camera.updateProjectionMatrix();
-					}
-				} );
-				// ... else create a new camera and use it in the loaded scene
+				// create a new downwards looking camera and use it in the loaded scene
 				if ( camera === undefined ) {
-					camera = new THREE.PerspectiveCamera( 30, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 10000 );
-					camera.position.set( - 200, 0, 200 );
+					camera = new THREE.PerspectiveCamera( 30, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 2000 );
+					camera.position.set( 0, 50, 0 );
+					camera.lookAt(0,0,0);
 				}
+				gpi = scene.getObjectByName("GianoPi");
+				gpiSpotlight = scene.getObjectByName("GianoPi SpotLight");
+				//gianoPiSpotlight.intensity = 0;
 				controls = new THREE.OrbitControls( camera );
 				// Ground plane and fog: examples for applying additional children and new property values to the loaded scene
 				var geometry = new THREE.PlaneBufferGeometry( 20000, 20000 );
