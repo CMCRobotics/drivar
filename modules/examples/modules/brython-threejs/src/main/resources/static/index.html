@@ -21,18 +21,17 @@
     
     
     <script>
-			var scene, camera, controls, stats;
+			var scene, camera,topCamera, controls, stats;
 			var renderer;
 			var url = 'scene.json';
 			var SCREEN_WIDTH = window.innerWidth;
 			var SCREEN_HEIGHT = window.innerHeight;
 			var container = document.getElementById( 'test' );
-			var gpi;
-			var gpiSpotlight;
+			var gpi,gpiSpotlight,gpiCamera;
 			renderer = new THREE.WebGLRenderer( { antialias: true } );
 			renderer.setPixelRatio( window.devicePixelRatio );
 			renderer.setSize( SCREEN_WIDTH, SCREEN_HEIGHT );
-			renderer.shadowMapEnabled = true;
+			renderer.shadowMap.enabled = true;
 			renderer.shadowMapSoft = false;
 			container.appendChild( renderer.domElement );
 			
@@ -41,13 +40,20 @@
 				scene = loadedScene;
 				scene.background = new THREE.Color( 0xffffff );
 				// create a new downwards looking camera and use it in the loaded scene
-				if ( camera === undefined ) {
-					camera = new THREE.PerspectiveCamera( 30, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 2000 );
-					camera.position.set( 0, 50, 0 );
-					camera.lookAt(new THREE.Vector3(0,0,0));
+				if ( topCamera === undefined ) {
+					topCamera = new THREE.PerspectiveCamera( 30, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 2000 );
+					topCamera.position.set( 0, 50, 0 );
+					topCamera.lookAt(new THREE.Vector3(0,0,0));
+					camera = topCamera;
 				}
 				gpi = scene.getObjectByName("GianoPi");
 				gpiSpotlight = scene.getObjectByName("GianoPi SpotLight");
+				
+				//
+				gpiCamera = scene.getObjectByName("GianoPi Camera");
+				gpiSpotlight.target = gpiCamera;
+				//gpi.rotateY(2*Math.PI/4);
+				gpi.translateX(-13);
 				//gianoPiSpotlight.intensity = 0;
 				controls = new THREE.OrbitControls( camera );
 				// Ground plane and fog: examples for applying additional children and new property values to the loaded scene
@@ -59,6 +65,7 @@
 				scene.add( ground );
 				scene.fog = new THREE.Fog( 0xffffff, 1000, 10000 );
 				animate();
+				gpiSpotlight.shadow.map.viewport.copy({x:-20,y:-20,w:600,z:600});
 			} );
 			window.onresize = function () {
 				camera.aspect = window.innerWidth / window.innerHeight;
