@@ -23,11 +23,13 @@
     <script>
 			var scene, camera,topCamera, controls, stats;
 			var renderer;
+			var gianoPiSpeed = 5;
 			var url = 'scene.json';
 			var SCREEN_WIDTH = window.innerWidth;
 			var SCREEN_HEIGHT = window.innerHeight;
 			var container = document.getElementById( 'test' );
 			var gpi,gpiSpotlight,gpiCamera;
+			var gpiCurrentPos = new THREE.Vector3();
 			renderer = new THREE.WebGLRenderer( { antialias: true } );
 			renderer.setPixelRatio( window.devicePixelRatio );
 			renderer.setSize( SCREEN_WIDTH/2, SCREEN_HEIGHT/2 );
@@ -76,9 +78,24 @@
 			};
 			function animate() {
 				requestAnimationFrame( animate );
+				TWEEN.update();
 				controls.update();
 				renderer.render( scene, camera );
 				
+			}
+			
+
+			function tweenGianoPiTo(destination){
+				gpiCurrentPos.copy(gpi.position);
+				var distance = gpiCurrentPos.distanceTo(destination.position);
+				var duration = (distance / gianoPiSpeed) * 1000;
+				
+				new TWEEN.Tween(gpi.position)
+			    .to(destination.position, duration)
+			    .onComplete(function() {
+			      console.log("movement complete")
+			    })
+			    .start();
 			}
 			
 		</script>
