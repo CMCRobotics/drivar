@@ -92,6 +92,7 @@
 				
 				new TWEEN.Tween(gpi.position)
 			    .to(destination.position, duration)
+			    .easing(TWEEN.Easing.Quadratic.InOut)
 			    .onComplete(function() {
 			      console.log("movement complete")
 			    })
