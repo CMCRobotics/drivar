@@ -30,7 +30,7 @@
 			var gpi,gpiSpotlight,gpiCamera;
 			renderer = new THREE.WebGLRenderer( { antialias: true } );
 			renderer.setPixelRatio( window.devicePixelRatio );
-			renderer.setSize( SCREEN_WIDTH, SCREEN_HEIGHT );
+			renderer.setSize( SCREEN_WIDTH/2, SCREEN_HEIGHT/2 );
 			renderer.shadowMap.enabled = true;
 			renderer.shadowMapSoft = false;
 			container.appendChild( renderer.domElement );
@@ -43,6 +43,7 @@
 				if ( topCamera === undefined ) {
 					topCamera = new THREE.PerspectiveCamera( 30, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 2000 );
 					topCamera.position.set( 0, 50, 0 );
+					topCamera.setLens(34);
 					topCamera.lookAt(new THREE.Vector3(0,0,0));
 					camera = topCamera;
 				}
@@ -52,10 +53,9 @@
 				//
 				gpiCamera = scene.getObjectByName("GianoPi Camera");
 				gpiSpotlight.target = gpiCamera;
-				//gpi.rotateY(2*Math.PI/4);
-				gpi.translateX(-13);
 				//gianoPiSpotlight.intensity = 0;
-				controls = new THREE.OrbitControls( camera );
+				controls = new THREE.OrbitControls( camera, document.getElementById("test") );
+				
 				// Ground plane and fog: examples for applying additional children and new property values to the loaded scene
 				var geometry = new THREE.PlaneBufferGeometry( 40000, 40000 );
 				var material = new THREE.MeshPhongMaterial( { shininess: 0.1 } );
@@ -65,12 +65,14 @@
 				scene.add( ground );
 				scene.fog = new THREE.Fog( 0xffffff, 1000, 10000 );
 				animate();
+				// Make bigger shadows by offsetting the viewport
 				gpiSpotlight.shadow.map.viewport.copy({x:-20,y:-20,w:600,z:600});
+				controls.maxPolarAngle = (Math.PI/2)-0.2;
 			} );
 			window.onresize = function () {
 				camera.aspect = window.innerWidth / window.innerHeight;
 				camera.updateProjectionMatrix();
-				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.setSize( window.innerWidth/2, window.innerHeight/2 );
 			};
 			function animate() {
 				requestAnimationFrame( animate );
