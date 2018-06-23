@@ -37,35 +37,29 @@ class Drivar(metaclass=ABCMeta):
     def initialize(self):
         pass
 
-    @abstractmethod
     def motor_move(self, direction = DIR_FORWARD,durationInMs=1000, speed = SPEED_SLOW, callback = None):
         pass
     
-    @abstractmethod
     def motor_rotateWheels(self, wheelSet = WHEELS_BOTH, direction = DIR_FORWARD, speed = SPEED_SLOW, callback = None):
         pass
     
-    @abstractmethod
     def motor_turn(self, direction = DIR_LEFT, angle = 90, callback = None):
         pass
 
-    @abstractmethod
     def motor_stop(self, callback = None):
         pass
  
     '''
       Return the distance to the nearest obstacle, in centimeters
     '''
-    @abstractmethod
     def range_getDistanceToObstacle(self):
         pass
  
     '''
       Indicate with a boolean whether there is an obstacle within the given distance
     '''
-    @abstractmethod
     def range_isObstacleWithin(self, distance):
-        pass
+        return False
         
     def time_wait(self, duration = 1000):
         time.sleep(duration/1000)
@@ -73,12 +67,41 @@ class Drivar(metaclass=ABCMeta):
     '''
       Orders the pen to be raised or lowered
     '''
-    @abstractmethod
     def pen_rotate(self, angle):
         pass
 
-    @abstractmethod
     def reflectivity_get(self):
+        return 0
+
+    def sound_playAsync(self, sound):
+        pass
+    
+    def sound_stop(self):
+        pass
+    
+    def sound_setVolume(self, level):
+        pass
+    
+    def spotlight_setIntensity(self, intensity):
+        pass
+    
+    def spotlight_thunder(self, duration=0):
+        # Start a thread that simulates thunder and random lightnings
+        pass
+    
+    def spotlight_wave(self, duration=0):
+        # Start a thread that simulates a breathing (sin wave)
         pass
 
+    def camera_tiltTo(self, angle):
+        pass
+    
+    def camera_panTo(self, angle):
+        pass
+    
+    def camera_setCapture(self, active):
+        pass
+    
+    def camera_isCapturing(self):
+        return False
 

@@ -1,4 +1,4 @@
-#  Driver library for Raspbuggy - Adafruit DC Motor Hat (i2c implementation)
+#  Driver library for Raspbuggy - Holonomic Adafruit DC Motor Hat (i2c implementation)
 '''
 Created on Apr 24, 2016
 
