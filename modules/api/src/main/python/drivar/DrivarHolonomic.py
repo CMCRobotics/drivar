@@ -57,11 +57,11 @@ class DrivarHolonomic(Drivar):
         power = self._getDCMotorHatSpeed(speedLevel)
         motorsToActuate = []
         
-        if direction == Drivar.DIR_FORWARD:
+        if direction == Drivar.DIR_BACKWARD:
             self.motorTwo.run(Adafruit_MotorHAT.FORWARD)
             self.motorFour.run(Adafruit_MotorHAT.BACKWARD)
             motorsToActuate = self.motorsEven
-        elif direction == Drivar.DIR_BACKWARD:
+        elif direction == Drivar.DIR_FORWARD:
             self.motorTwo.run(Adafruit_MotorHAT.BACKWARD)
             self.motorFour.run(Adafruit_MotorHAT.FORWARD)
             motorsToActuate = self.motorsEven
@@ -87,10 +87,10 @@ class DrivarHolonomic(Drivar):
     def motor_turn(self, direction = Drivar.DIR_PORTSIDE, angle = 90, speed = Drivar.SPEED_MEDIUM, callback = None):
         if (direction == Drivar.DIR_PORTSIDE or direction == Drivar.DIR_LEFT):
             for m in self.allMotors:
-                m.run(Adafruit_MotorHAT.BACKWARD)
+                m.run(Adafruit_MotorHAT.FORWARD)
         elif (direction == Drivar.DIR_STARBOARD or direction == Drivar.DIR_RIGHT):
             for m in self.allMotors:
-                m.run(Adafruit_MotorHAT.FORWARD)
+                m.run(Adafruit_MotorHAT.BACKWARD)
         
         motorsToActuate = self.allMotors
         self._actuateMotors(motorsToActuate, self._getDCMotorHatSpeed(speed))
