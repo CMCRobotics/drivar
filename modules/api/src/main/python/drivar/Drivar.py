@@ -43,7 +43,7 @@ class Drivar(metaclass=ABCMeta):
     def motor_rotateWheels(self, wheelSet = WHEELS_BOTH, direction = DIR_FORWARD, speed = SPEED_SLOW, callback = None):
         pass
     
-    def motor_turn(self, direction = DIR_LEFT, angle = 90, callback = None):
+    def motor_turn(self, direction = DIR_LEFT, angle = 90, speed = SPEED_SLOW, callback = None):
         pass
 
     def motor_stop(self, callback = None):

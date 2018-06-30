@@ -84,17 +84,17 @@ class DrivarHolonomic(Drivar):
        Note that this class is using DC motors, so the resulting
        rotation angle is very imprecise and offers no guarantees.
     """
-    def motor_turn(self, direction = Drivar.DIR_PORTSIDE, angle = 90, callback = None):
+    def motor_turn(self, direction = Drivar.DIR_PORTSIDE, angle = 90, speed = Drivar.SPEED_MEDIUM, callback = None):
         if (direction == Drivar.DIR_PORTSIDE or direction == Drivar.DIR_LEFT):
-            for m in self.motorsOdd:
+            for m in self.allMotors:
                 m.run(Adafruit_MotorHAT.BACKWARD)
         elif (direction == Drivar.DIR_STARBOARD or direction == Drivar.DIR_RIGHT):
-            for m in self.motorsOdd:
+            for m in self.allMotors:
                 m.run(Adafruit_MotorHAT.FORWARD)
         
         motorsToActuate = self.allMotors
-        self._actuateMotors(motorsToActuate, self._getDCMotorHatSpeed(Drivar.SPEED_SLOW))
-        time.sleep( (angle/90) * 0.2 )
+        self._actuateMotors(motorsToActuate, self._getDCMotorHatSpeed(speed))
+        time.sleep( (angle/90) )
         self.motor_stop()
         
         if callback is not None:
@@ -109,7 +109,7 @@ class DrivarHolonomic(Drivar):
         for x in range(power,10):
             for motor in motorsToActuate:
                 motor.setSpeed(x)
-                time.sleep(0.01)
+                time.sleep(0.02)
         for motor in motorsToActuate:
                 motor.setSpeed(power)        
         self.currentSpeed = power
@@ -174,13 +174,13 @@ class DrivarHolonomic(Drivar):
     @staticmethod
     def _getDCMotorHatSpeed(speed):
         if(speed==Drivar.SPEED_SLOW):
-            return 100
+            return 20
         elif(speed==Drivar.SPEED_MEDIUM):
-            return 200
+            return 40
         elif(speed==Drivar.SPEED_FAST):
-            return 255
-        else :
             return 100
+        else :
+            return 20
 
 Drivar.register(DrivarHolonomic)
 

@@ -55,7 +55,7 @@ class DrivarNoop(Drivar):
         if callback is not None:
             callback()
         
-    def motor_turn(self, direction = Drivar.DIR_LEFT, angle = 90, callback = None):
+    def motor_turn(self, direction = Drivar.DIR_LEFT, angle = 90,  speed = Drivar.SPEED_SLOW, callback = None):
         _dir = "left"
         if(direction == Drivar.DIR_RIGHT):
             _dir = "right"

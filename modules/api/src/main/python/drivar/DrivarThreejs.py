@@ -1,18 +1,21 @@
 #  Driver library for Raspbuggy - Threejs / Brython implementation for simulation and testing
 '''
-Created on Jun 01, 2015
+Created on Jun 01, 2018
 
 @author: bcopy
 '''
 
 from drivar.Drivar import Drivar
 import time
+from browser import document as doc
+from browser import window
+from javascript import JSObject,JSConstructor
 
 class DrivarThreejs(Drivar):
     
     def __init__(self, enforceSleepingTime=True):
-        self.m_initialized = False
-        self.m_moving = False
+        self.THREE = window.THREE
+        self.drivar = window.drivar
         self.m_enforceSleepingTime = enforceSleepingTime
         self.m_distanceToNextObstacle = 2000
 
@@ -53,7 +56,7 @@ class DrivarThreejs(Drivar):
         if callback is not None:
             callback()
         
-    def motor_turn(self, direction = Drivar.DIR_LEFT, angle = 90, callback = None):
+    def motor_turn(self, direction = Drivar.DIR_LEFT, angle = 90,  speed = Drivar.SPEED_SLOW, callback = None):
         _dir = "left"
         if(direction == Drivar.DIR_RIGHT):
             _dir = "right"
