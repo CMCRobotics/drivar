@@ -174,13 +174,13 @@ class DrivarHolonomic(Drivar):
     @staticmethod
     def _getDCMotorHatSpeed(speed):
         if(speed==Drivar.SPEED_SLOW):
-            return 20
+            return 10
         elif(speed==Drivar.SPEED_MEDIUM):
             return 40
         elif(speed==Drivar.SPEED_FAST):
             return 100
         else :
-            return 20
+            return 10
 
 Drivar.register(DrivarHolonomic)
 
