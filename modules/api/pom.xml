@@ -5,42 +5,42 @@
     <version>0.5.0</version>
     <name>Raspbuggy - Drivar hardware abstraction layer</name>
     <packaging>jar</packaging>
-	
+    
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
   <build>
     <plugins>
-		<plugin>
-			<groupId>com.github.UltimateDogg</groupId>
-			<artifactId>maven-python-distribute-plugin</artifactId>
-			<version>0.2.6</version>
-			<configuration>
-			  <pythonExecutable>python3</pythonExecutable>
-			</configuration>
-			<executions>
-				<execution>
-                        <id>package</id>
-                        <goals> <goal>package</goal> </goals>
-                </execution>
+        <plugin>
+            <groupId>com.github.UltimateDogg</groupId>
+            <artifactId>maven-python-distribute-plugin</artifactId>
+            <version>0.2.6</version>
+            <configuration>
+              <pythonExecutable>python3</pythonExecutable>
+            </configuration>
+            <executions>
                 <execution>
-                        <id>process</id>
-                        <goals> <goal>process-sources</goal> </goals>
-                </execution>
-                <execution>
-                        <id>install</id>
-                        <goals> <goal>install</goal> </goals>
-                </execution>
-			</executions>
-		</plugin>
+            <id>package</id>
+            <goals> <goal>package</goal> </goals>
+        </execution>
+        <execution>
+            <id>process</id>
+            <goals> <goal>process-sources</goal> </goals>
+        </execution>
+        <execution>
+            <id>install</id>
+            <goals> <goal>install</goal> </goals>
+        </execution>
+            </executions>
+        </plugin>
     </plugins>
   </build>
   
     <pluginRepositories>
-            <pluginRepository>
-                    <id>jitpack.io</id>
-                    <url>https://jitpack.io</url>
-            </pluginRepository>
+        <pluginRepository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </pluginRepository>
     </pluginRepositories>
 </project>
