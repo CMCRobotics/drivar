@@ -36,17 +36,7 @@
 	        <version>0.30</version>
 	    </dependency>
 	    
-	    <dependency>
-		    <groupId>org.webjars</groupId>
-		    <artifactId>three.js</artifactId>
-		    <version>r88</version>
-		</dependency>
-        <dependency>
-		    <groupId>org.webjars.npm</groupId>
-		    <artifactId>brython</artifactId>
-		    <version>3.5.1</version>
-		</dependency>
-		
+	   
 		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -60,7 +50,17 @@
 			<scope>test</scope>
 		</dependency>
 
-
+        <dependency>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>three.js</artifactId>
+		    <version>r88</version>
+		</dependency>
+        <dependency>
+		    <groupId>org.webjars.npm</groupId>
+		    <artifactId>brython</artifactId>
+		    <version>3.5.1</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.webjars.npm</groupId>
 			<artifactId>tween.js</artifactId>
