@@ -8,7 +8,7 @@ setup(
       },
       name = '${PROJECT_NAME}',
       python_requires= '>=3.4.0',
-      description = 'Hardware abstraction layer for Raspbuggy and GianoPi robots',
+      description = 'Hardware abstraction layer for Raspbuggy, Bit:bot and GianoPi robots',
       author = 'Brice Copy',
       author_email = 'brice.copy@gmail.com',
       url = 'https://github.com/cmcrobotics/raspbuggy',
