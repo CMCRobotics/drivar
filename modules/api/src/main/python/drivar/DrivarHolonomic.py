@@ -13,6 +13,11 @@ import atexit
 import time
 import logging
 
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(18, GPIO.OUT)
+
+
 class DrivarHolonomic(Drivar):
     
     def __init__(self):
@@ -24,6 +29,11 @@ class DrivarHolonomic(Drivar):
         self.motorThree =  None
         self.motorFour =   None
         self.moving = False
+        
+        self.pwm = GPIO.PWM(18, 50)  # channel=12 frequency=50Hz
+        self.pwm.start(100)
+        
+
         
 
     def initialize(self):
@@ -162,6 +172,9 @@ class DrivarHolonomic(Drivar):
     def reflectivity_get(self):
         return 0
         
+    def spotlight_setIntensity(self, intensity):
+        self.pwm.ChangeDutyCycle(100)
+
 
     def _shutdown(self):
         self.motor_stop()
@@ -184,5 +197,5 @@ class DrivarHolonomic(Drivar):
 
 Drivar.register(DrivarHolonomic)
 
-if __name__ == '__main__':
+
     _drivar = DrivarHolonomic()
