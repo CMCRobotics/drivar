@@ -4,7 +4,7 @@ import logging
 
 
 class PahoMqttAdapter:
-    """Translates MQTT calls into Drivar calls"""
+    """Translates incoming MQTT calls into local Drivar calls"""
     
     def __init__(self, drivar, topicRoot="scene/robot/drivar/", host="localhost", port=1883):
         self.logger = logging.getLogger(__name__)

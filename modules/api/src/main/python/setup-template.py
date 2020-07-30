@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-      install_requires=['distribute', 'Adafruit_MotorHAT>=1.3.0','PyTweening==1.0.3'],
+      install_requires=['distribute', 'Adafruit_MotorHAT>=1.3.0','PyTweening==1.0.3', 'paho-mqtt>=1.5.0'],
       extras_require={
          'test':['testfixtures','hbmqtt'],
          'nxt':['nxt-python==2.2.2']

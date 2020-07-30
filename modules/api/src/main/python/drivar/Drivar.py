@@ -61,7 +61,7 @@ class Drivar(metaclass=ABCMeta):
     def range_isObstacleWithin(self, distance):
         return False
         
-    def time_wait(self, duration = 1000):
+    def time_wait(self, durationInMs = 1000):
         time.sleep(duration/1000)
         
     '''
