@@ -16,7 +16,7 @@ def parse_lineprotocol_message(msg):
     measurement = None
     tags = {}
     values = {}
-    value = None
+    timestamp = None
 
     fragments = msg.split(" ")
     fragment = _pop_head_or_none(fragments)
@@ -39,6 +39,19 @@ def parse_lineprotocol_message(msg):
 
     fragment = _pop_head_or_none(fragments)
     if fragment is not None:
-        value = float(fragment)
+        timestamp = int(fragment)
         
-    return (measurement, tags, values, value)
+    return (measurement, tags, values, timestamp)
+
+def serialize_lineprotocol_message(measurement, tags= None, values=None, timestamp=None): 
+    result = measurement
+    if tags is not None:
+      result += (','.join('{}="{}"'.format(key, value) for key, value in tags.items())) + " "
+    if values is not None:
+      result += (','.join('{}={}'.format(key, value) for key, value in values.items())) + " "
+    if timestamp is not None:
+      result += timestamp
+    else
+      result += microbit.running_time()
+    return result
+    
